@@ -220,7 +220,7 @@ func (fs *FileSystemRouter) Router() Middleware {
 			}
 
 			var fastcgiPathInfo string
-			pathinfoRe := regexp.MustCompile(`^(.+?\.php)(\/.*)$`)
+			pathinfoRe := regexp.MustCompile(`^(.+?\.php)(\/?.*)$`)
 			if matches := pathinfoRe.FindStringSubmatch(fastcgiScriptName); len(matches) > 0 {
 				fastcgiScriptName, fastcgiPathInfo = matches[1], matches[2]
 			}
