@@ -231,9 +231,9 @@ func (fs *FileSystemRouter) Router() Middleware {
 			urlPath := r.URL.Path
 			if strings.HasSuffix(urlPath, "/") {
 				urlPath = path.Join(filepath.FromSlash(urlPath), "index.php")
+				req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, filepath.FromSlash(urlPath))
 			}
-			req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, filepath.FromSlash(urlPath))
-
+			
 			return inner(client, req)
 		}
 	}
