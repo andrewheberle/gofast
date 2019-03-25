@@ -213,6 +213,11 @@ func (fs *FileSystemRouter) Router() Middleware {
 			// with the given http request
 			r := req.Raw
 			fastcgiScriptName := r.URL.Path
+			
+			// handle directory index
+			if strings.HasSuffix(fastcgiScriptName, "/") {
+				fastcgiScriptName = fastcgiScriptName + "index.php"
+			}
 
 			var fastcgiPathInfo string
 			pathinfoRe := regexp.MustCompile(`^(.+?\.php)(\/.*)$`)
@@ -226,13 +231,6 @@ func (fs *FileSystemRouter) Router() Middleware {
 			req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, filepath.FromSlash(fastcgiScriptName))
 			req.Params["DOCUMENT_URI"] = r.URL.Path
 			req.Params["DOCUMENT_ROOT"] = fs.DocRoot
-
-			// handle directory index
-			urlPath := r.URL.Path
-			if strings.HasSuffix(urlPath, "/") {
-				urlPath = path.Join(filepath.FromSlash(urlPath), "index.php")
-				req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, filepath.FromSlash(urlPath))
-			}
 			
 			return inner(client, req)
 		}
