@@ -221,18 +221,18 @@ func (fs *FileSystemRouter) Router() Middleware {
 			}
 
 			req.Params["PATH_INFO"] = fastcgiPathInfo
-			req.Params["PATH_TRANSLATED"] = filepath.Join(fs.DocRoot, fastcgiPathInfo)
+			req.Params["PATH_TRANSLATED"] = filepath.Join(fs.DocRoot, filepath.FromSlash(fastcgiPathInfo))
 			req.Params["SCRIPT_NAME"] = fastcgiScriptName
-			req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, fastcgiScriptName)
+			req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, filepath.FromSlash(fastcgiScriptName))
 			req.Params["DOCUMENT_URI"] = r.URL.Path
 			req.Params["DOCUMENT_ROOT"] = fs.DocRoot
 
 			// handle directory index
 			urlPath := r.URL.Path
 			if strings.HasSuffix(urlPath, "/") {
-				urlPath = path.Join(urlPath, "index.php")
+				urlPath = path.Join(filepath.FromSlash(urlPath), "index.php")
 			}
-			req.Params["SCRIPT_FILENAME"] = path.Join(fs.DocRoot, urlPath)
+			req.Params["SCRIPT_FILENAME"] = filepath.Join(fs.DocRoot, filepath.FromSlash(urlPath))
 
 			return inner(client, req)
 		}
