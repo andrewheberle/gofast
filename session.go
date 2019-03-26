@@ -216,7 +216,7 @@ func (fs *FileSystemRouter) Router() Middleware {
 			
 			// handle directory index
 			if strings.HasSuffix(fastcgiScriptName, "/") {
-				fastcgiScriptName = fastcgiScriptName + "index.php"
+				fastcgiScriptName = path.Join(fastcgiScriptName, "index.php")
 			}
 
 			var fastcgiPathInfo string
